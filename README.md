@@ -7,7 +7,32 @@ A simple ToDo cli app using python and MongoDB.
 
 ## Requisites
 
-* pymongo
+* python 2.7
+* pymongo(MongoDB 3.2)
+
+## Examples
+```
+$ task.py -a buy some milk -p Shopping
+$ task.py buy 2kg of bread -p Shopping
+
+$ task.py -c 1
+$ task.py -l shopping
+```
+
+## Features
+
+* Create task with description and an optional project
+* Complete a task
+* List all task or filter by description or project
+* Show a task
+
+## Incoming Features
+
+* Improve global look and feel
+* Support for tags
+* Support for due date
+* Subtasks
+* Batch insert from a file
 
 ## Usage
 
@@ -33,17 +58,3 @@ optional arguments:
   -p PROJECT, --project PROJECT
                         Project of a task
 ```
-
-## Features
-
-* Create task with description and an optional project
-* Complete a task
-* List all task or filter by description or project
-* Show a task
-
-## Incoming Features
-
-* Support for tags
-* Support for due date
-* Subtasks
-* Batch insert from a file
