@@ -4,6 +4,7 @@ A simple ToDo cli app using python and MongoDB.
 
 [![Code Health](https://landscape.io/github/mattgaviota/taskpy/master/landscape.svg?style=flat)](https://landscape.io/github/mattgaviota/taskpy/master)
 [![Code Climate](https://codeclimate.com/github/mattgaviota/taskpy/badges/gpa.svg)](https://codeclimate.com/github/mattgaviota/taskpy)
+
 ## Requisites
 
 * pymongo
@@ -32,3 +33,17 @@ optional arguments:
   -p PROJECT, --project PROJECT
                         Project of a task
 ```
+
+## Features
+
+* Create task with description and an optional project
+* Complete a task
+* List all task or filter by description or project
+* Show a task
+
+## Incoming Features
+
+* Support for tags
+* Support for due date
+* Subtasks
+* Batch insert from a file
