@@ -8,6 +8,7 @@ A simple ToDo cli app using python and MongoDB.
 
 ## Usage
 
+```bash
 usage: task.py [-h] [-a ADD [ADD ...] | -c COMPLETE | -l [LIST] | -s SHOW]
                [-p PROJECT]
                [parametro [parametro ...]]
@@ -28,3 +29,4 @@ optional arguments:
   -s SHOW, --show SHOW  Show a task
   -p PROJECT, --project PROJECT
                         Project of a task
+```
