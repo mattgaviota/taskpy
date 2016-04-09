@@ -4,6 +4,7 @@
 from argparse import ArgumentParser
 from datetime import datetime
 from pymongo import MongoClient
+from prettyjson import PrettyJson
 
 
 class Client(object):
@@ -116,8 +117,9 @@ class Client(object):
     def show_all_task(self, txtfilter):
         """Show all task, optionaly filter the result"""
         if txtfilter == 'all':
-            for task in self.tasks.find({}, {'_id': 0}):
-                print task
+            json_list = list(self.tasks.find({}, {'_id': 0}))
+            table_json = PrettyJson(json_list)
+            table_json.show()
         else:
             for task in self.tasks.find(
                     {

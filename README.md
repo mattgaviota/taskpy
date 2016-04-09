@@ -33,6 +33,7 @@ $ task.py -l shopping
 * Support for due date
 * Subtasks
 * Batch insert from a file
+* Support for projection settings in "PrettyJson"
 
 ## Usage
 
