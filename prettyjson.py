@@ -1,8 +1,17 @@
-#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """ Printing pretty json tables """
-from prettytable import PrettyTable
 import datetime
+from prettytable import PrettyTable
+
+
+def format_field(name, value):
+    """Format a Field of a task"""
+    if name == 'status':
+        if value == 'complete':
+            value = '--{}--'.format(value)
+    elif name in ['date', 'due_date', 'complete_date']:
+        value = value.strftime("%d/%m/%Y %H:%M")
+    return '{}: {}\r\n'.format(name, value)
 
 
 class PrettyJson(object):
@@ -33,11 +42,3 @@ class PrettyJson(object):
     def show(self):
         """ Show pretty tasks """
         print self.table
-
-
-def main():
-    """ Main program for pretty json tables """
-    pass
-
-if __name__ == '__main__':
-    main()
