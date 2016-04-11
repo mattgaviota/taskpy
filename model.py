@@ -39,7 +39,7 @@ class Client(object):
     def insert_task(self, doc):
         """Insert a task into tasks collection"""
         self.tasks.insert_one(doc)
-        print "task created with id {}".format(doc['id'])
+        print("Task created with id {}".format(doc['id']))
 
     def create_task(self, **args):
         """Create a document with de args provided"""
@@ -84,7 +84,7 @@ class Client(object):
                 '$unset': {'id': ""}
             }
         )
-        print "Task {} completed".format(clean_id)
+        print("Task {} completed".format(clean_id))
 
     def get_free_id(self):
         """Return the next free internal id."""
@@ -111,44 +111,55 @@ class Client(object):
     def show_task(self, clean_id, doc=None):
         """Show a task given the id(not the _id)"""
         if doc:
-            for key, val in doc.iteritems():
-                print format_field(key, val),
+            for key, val in sorted(doc.items()):
+                print(format_field(key, val), end="")
         else:
             doc = self.tasks.find_one({'id': clean_id}, {'_id': 0})
             if doc:
-                for key, val in doc.iteritems():
-                    print format_field(key, val),
+                for key, val in sorted(doc.items()):
+                    print(format_field(key, val), end="")
             else:
-                print "The task doesn't exist or was completed."
+                print("The task doesn't exist or was completed.")
 
     def show_all_task(self, txtfilter):
         """Show all task, optionaly filter the result"""
         if txtfilter == 'all':
-            # json_list = list(self.tasks.find({}, {'_id': 0}))
-            # table_json = PrettyJson(json_list)
-            # table_json.show()
-            for task in self.tasks.find({}, {'_id': 0}):
-                print "----" * 10 + "\r\n",
-                self.show_task(None, task)
+            cursor = self.tasks.find({}, {'_id': 0})
+            if cursor.count() < 1:
+                print("----" * 10 + "\r\n", end="")
+                print("Nothing added yet. Use '-a' option to create a task")
+            else:
+                for task in cursor:
+                    print("----" * 10 + "\r\n", end="")
+                    self.show_task(None, task)
         else:
-            for task in self.tasks.find(
-                    {
-                        '$or': [
-                            {
-                                'description': {
-                                    '$regex': txtfilter,
-                                    '$options': 'i'
-                                }
-                            },
-                            {
-                                'project': {
-                                    '$regex': txtfilter,
-                                    '$options': 'i'
-                                }
+            cursor = self.tasks.find(
+                {
+                    '$or': [
+                        {
+                            'description': {
+                                '$regex': txtfilter,
+                                '$options': 'i'
                             }
-                        ]
-                    },
-                    {'_id': 0}
-            ):
-                print "----" * 10 + "\r\n",
-                self.show_task(None, task)
+                        },
+                        {
+                            'project': {
+                                '$regex': txtfilter,
+                                '$options': 'i'
+                            }
+                        }
+                    ],
+                    'status': 'incomplete'
+                },
+                {'_id': 0}
+            )
+            if cursor.count() < 1:
+                print("----" * 10 + "\r\n", end="")
+                print(
+                    "Nothing added with the filter: '{0}'.\r\n"
+                    "Use '-a' option to create a task".format(txtfilter)
+                )
+            else:
+                for task in cursor:
+                    print("----" * 10 + "\r\n", end="")
+                    self.show_task(None, task)

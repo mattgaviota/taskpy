@@ -9,30 +9,49 @@ class Taskparser(object):
     """Parser to manage de options and arguments"""
     def __init__(self):
         self.args = []
-        self.parser = ArgumentParser(description="Simple todo app")
+        self.parser = ArgumentParser(description="Task Manager app")
         self.create_argument_parser()
         self.dbclient = Client()
 
     def create_argument_parser(self):
         """Create the argument group and other arguments."""
         group = self.parser.add_mutually_exclusive_group()
-        group.add_argument("-a", "--add", nargs="+", help="Add a task")
+        group.add_argument(
+            "-a",
+            "--add",
+            nargs="+",
+            help="Add a task",
+            metavar="DESCRIPTION"
+        )
         group.add_argument(
             "-c",
             "--complete",
             type=int,
-            help="Check a task as complete"
+            help="Check a task as complete",
+            metavar="TASK ID"
         )
         group.add_argument(
             "-l",
             "--list",
             nargs='?',
             const='all',
-            help="List all task"
+            help="List all task",
+            metavar="FILTER"
         )
-        group.add_argument("-s", "--show", type=int, help="Show a task")
-        self.parser.add_argument("-p", "--project", help="Project of a task")
-        self.parser.add_argument("parametro", nargs="*")
+        group.add_argument(
+            "-s",
+            "--show",
+            type=int,
+            help="Show a task",
+            metavar="TASK ID"
+        )
+        self.parser.add_argument(
+            "-p",
+            "--project",
+            help="Project of a task",
+            metavar="PROJECT"
+        )
+        self.parser.add_argument("PARAMETER", nargs="*")
 
     def process_args(self):
         """Procesa los argumentos y devuelve un resultado afín"""

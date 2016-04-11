@@ -36,9 +36,9 @@ class PrettyJson(object):
                     item_value = item[col.lower()].strftime("%x %X")
                 row.append(item_value)
             except KeyError:
-                print "Column %s do not match any json attribute", col
+                print("Column {0} do not match any json attribute".format(col))
         return row
 
     def show(self):
         """ Show pretty tasks """
-        print self.table
+        print(self.table)

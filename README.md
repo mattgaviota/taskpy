@@ -7,16 +7,49 @@ A simple ToDo cli app using python and MongoDB.
 
 ## Requisites
 
-* python 2.7
+* python 3.X
 * pymongo(MongoDB 3.2)
 
 ## Examples
 ```
 $ task.py -a buy some milk -p Shopping
-$ task.py buy 2kg of bread -p Shopping
+Task created with id 1
 
-$ task.py -c 1
-$ task.py -l shopping
+$ task.py buy 2kg of bread -p Shopping
+Task created with id 2
+
+$ task.py -s 1
+date: 11/04/2016 16:44
+description: buy some milk
+id: 2
+project: Shopping
+status: incomplete
+
+$task.py -c 1
+Task 2 completed
+
+$ task.py -l shopping # only show incompleted tasks
+----------------------------------------
+date: 11/04/2016 16:45
+description: buy 2kg of bread
+id: 3
+project: Shopping
+status: incomplete
+
+$ task.py -l # show all tasks
+----------------------------------------
+complete_date: 11/04/2016 16:46
+date: 11/04/2016 16:44
+description: buy some milk
+project: Shopping
+status: --complete--
+----------------------------------------
+date: 11/04/2016 16:45
+description: buy 2kg of bread
+id: 3
+project: Shopping
+status: incomplete
+
 ```
 
 ## Features
