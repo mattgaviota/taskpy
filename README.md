@@ -71,24 +71,25 @@ status: incomplete
 ## Usage
 
 ```bash
-usage: task.py [-h] [-a ADD [ADD ...] | -c COMPLETE | -l [LIST] | -s SHOW]
-               [-p PROJECT]
-               [parametro [parametro ...]]
+usage: task.py [-h] [-a DESCRIPTION [DESCRIPTION ...] | -c TASK ID | -l
+               [FILTER] | -s TASK ID] [-p PROJECT]
+               [PARAMETER [PARAMETER ...]]
 
-Simple todo app
+Task Manager app
 
 positional arguments:
-  parametro
+  PARAMETER
 
 optional arguments:
   -h, --help            show this help message and exit
-  -a ADD [ADD ...], --add ADD [ADD ...]
+  -a DESCRIPTION [DESCRIPTION ...], --add DESCRIPTION [DESCRIPTION ...]
                         Add a task
-  -c COMPLETE, --complete COMPLETE
+  -c TASK ID, --complete TASK ID
                         Check a task as complete
-  -l [LIST], --list [LIST]
+  -l [FILTER], --list [FILTER]
                         List all task
-  -s SHOW, --show SHOW  Show a task
+  -s TASK ID, --show TASK ID
+                        Show a task
   -p PROJECT, --project PROJECT
                         Project of a task
 ```
