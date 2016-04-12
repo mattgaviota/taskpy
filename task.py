@@ -20,6 +20,7 @@ class Taskparser(object):
             "-a",
             "--add",
             nargs="+",
+            dest="description",
             help="Add a task",
             metavar="DESCRIPTION"
         )
@@ -48,10 +49,23 @@ class Taskparser(object):
         self.parser.add_argument(
             "-p",
             "--project",
+            dest="project",
             help="Project of a task",
             metavar="PROJECT"
         )
-        self.parser.add_argument("PARAMETER", nargs="*")
+        self.parser.add_argument(
+            "-t",
+            "--tags",
+            nargs="+",
+            dest="tags",
+            help="Tags of a task(space between tags)",
+            metavar="TAGS"
+        )
+        self.parser.add_argument(
+            "parameter",
+            nargs="*",
+            metavar="Description"
+        )
 
     def process_args(self):
         """Procesa los argumentos y devuelve un resultado afín"""
@@ -60,32 +74,14 @@ class Taskparser(object):
             self.dbclient.show_all_task(args.list)
         elif args.show:
             self.dbclient.show_task(args.show)
-        elif args.add:
-            if args.project:
-                new_doc = self.dbclient.create_task(
-                    description=' '.join(args.add),
-                    project=args.project
-                )
-                self.dbclient.insert_task(new_doc)
-            else:
-                new_doc = self.dbclient.create_task(
-                    description=' '.join(args.add)
-                )
-                self.dbclient.insert_task(new_doc)
+        elif args.description:
+            new_doc = self.dbclient.create_task(vars(args))
+            self.dbclient.insert_task(new_doc)
         elif args.complete:
             self.dbclient.complete_task(args.complete)
-        elif args.parametro:
-            if args.project:
-                new_doc = self.dbclient.create_task(
-                    description=' '.join(args.parametro),
-                    project=args.project
-                )
-                self.dbclient.insert_task(new_doc)
-            else:
-                new_doc = self.dbclient.create_task(
-                    description=' '.join(args.parametro)
-                )
-                self.dbclient.insert_task(new_doc)
+        elif args.parameter:
+            new_doc = self.dbclient.create_task(vars(args))
+            self.dbclient.insert_task(new_doc)
 
 
 def main():

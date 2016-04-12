@@ -2,7 +2,7 @@
 """Models to set crud operation into the tasks collection"""
 from datetime import datetime
 from pymongo import MongoClient
-from prettyjson import format_field
+from utils import format_field, clean_tags
 
 
 class Client(object):
@@ -41,14 +41,17 @@ class Client(object):
         self.tasks.insert_one(doc)
         print("Task created with id {}".format(doc['id']))
 
-    def create_task(self, **args):
+    def create_task(self, args):
         """Create a document with de args provided"""
         doc = {}
         doc['id'] = self.get_free_id()
-        doc['description'] = args['description']
         try:
+            doc['description'] = ' '.join(args['description'])
+        except TypeError:
+            doc['description'] = ' '.join(args['parameter'])
+        if args['project']:
             doc['project'] = args['project']
-        except KeyError:
+        else:
             doc['project'] = 'default'
         doc['status'] = "incomplete"
         doc['date'] = datetime.now()
@@ -57,7 +60,7 @@ class Client(object):
         except KeyError:
             pass
         try:
-            doc['tags'] = args['tags']
+            doc['tags'] = clean_tags(args['tags'])
         except KeyError:
             pass
         try:
@@ -144,6 +147,12 @@ class Client(object):
                         },
                         {
                             'project': {
+                                '$regex': txtfilter,
+                                '$options': 'i'
+                            }
+                        },
+                        {
+                            'tags': {
                                 '$regex': txtfilter,
                                 '$options': 'i'
                             }
