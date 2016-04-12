@@ -15,7 +15,7 @@ A simple ToDo cli app using python and MongoDB.
 $ task.py -a buy some milk -p Shopping
 Task created with id 1
 
-$ task.py buy 2kg of bread -p Shopping
+$ task.py buy 2kg of bread -p Shopping -t shopp reminder
 Task created with id 2
 
 $ task.py -s 1
@@ -58,11 +58,11 @@ status: incomplete
 * Complete a task
 * List all task or filter by description or project
 * Show a task
+* Support for tags
 
 ## Incoming Features
 
 * Improve global look and feel
-* Support for tags
 * Support for due date
 * Subtasks
 * Batch insert from a file
