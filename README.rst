@@ -21,6 +21,7 @@ Examples
 --------
 
 .. code-block:: bash
+
     $ task.py -a buy some milk -p Shopping -q H
     Task created with id 1
 
