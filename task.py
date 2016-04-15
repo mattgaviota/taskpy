@@ -62,13 +62,20 @@ class Taskparser(object):
             metavar="TAGS"
         )
         self.parser.add_argument(
+            "-q",
+            "--queue-priority",
+            dest="priority",
+            help="Priority ([H]igh, [L]ow)",
+            metavar="PRIORITY"
+        )
+        self.parser.add_argument(
             "parameter",
             nargs="*",
             metavar="Description"
         )
 
     def process_args(self):
-        """Procesa los argumentos y devuelve un resultado afín"""
+        """Process arguments to execute the right for each one."""
         args = self.parser.parse_args()
         if args.list:
             self.dbclient.show_all_task(args.list)
@@ -82,6 +89,8 @@ class Taskparser(object):
         elif args.parameter:
             new_doc = self.dbclient.create_task(vars(args))
             self.dbclient.insert_task(new_doc)
+        else:
+            self.parser.print_help()
 
 
 def main():

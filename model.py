@@ -2,7 +2,7 @@
 """Models to set crud operation into the tasks collection"""
 from datetime import datetime
 from pymongo import MongoClient
-from utils import format_field, clean_tags
+from utils import clean_tags, format_field, prioritize
 
 
 class Client(object):
@@ -55,13 +55,10 @@ class Client(object):
             doc['project'] = 'default'
         doc['status'] = "incomplete"
         doc['date'] = datetime.now()
-        try:
-            doc['priority'] = args['priority']
-        except KeyError:
-            pass
+        doc['priority'] = prioritize(args['priority'])
         try:
             doc['tags'] = clean_tags(args['tags'])
-        except KeyError:
+        except TypeError:
             pass
         try:
             doc['due_date'] = args['due_date']
@@ -127,7 +124,7 @@ class Client(object):
     def show_all_task(self, txtfilter):
         """Show all task, optionaly filter the result"""
         if txtfilter == 'all':
-            cursor = self.tasks.find({}, {'_id': 0})
+            cursor = self.tasks.find({}, {'_id': 0}).sort('priority', 1)
             if cursor.count() < 1:
                 print("----" * 10 + "\r\n", end="")
                 print("Nothing added yet. Use '-a' option to create a task")
@@ -161,7 +158,7 @@ class Client(object):
                     'status': 'incomplete'
                 },
                 {'_id': 0}
-            )
+            ).sort('priority', 1)
             if cursor.count() < 1:
                 print("----" * 10 + "\r\n", end="")
                 print(

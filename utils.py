@@ -20,6 +20,18 @@ def format_field(name, value):
     return '{}: {}\r\n'.format(name, value)
 
 
+def prioritize(priority):
+    """
+    Check if the parameter is a proper priority.
+    H for High priority.
+    L for Low priority. This is the default.
+    """
+    if priority and priority in 'hH':
+        return 'H'
+    else:
+        return 'L'
+
+
 # class PrettyJson(object):
 #     """ A class for printing pretty json table """
 #     def __init__(self, json_list):
