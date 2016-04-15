@@ -1,8 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """Simple todo manager app"""
-from argparse import ArgumentParser
+from argparse import ArgumentParser, FileType
 from model import Client
+
+
+OPTIONALS = ['parameter', 'tags', 'project', 'priority']
 
 
 class Taskparser(object):
@@ -23,6 +26,14 @@ class Taskparser(object):
             dest="description",
             help="Add a task",
             metavar="DESCRIPTION"
+        )
+        group.add_argument(
+            "-f",
+            "--file",
+            dest="file",
+            type=FileType('r', encoding=None),
+            help="Add batch of tasks in a file",
+            metavar="INPUT FILE"
         )
         group.add_argument(
             "-c",
@@ -47,6 +58,11 @@ class Taskparser(object):
             metavar="TASK ID"
         )
         self.parser.add_argument(
+            "parameter",
+            nargs="*",
+            metavar="Description"
+        )
+        self.parser.add_argument(
             "-p",
             "--project",
             dest="project",
@@ -68,16 +84,26 @@ class Taskparser(object):
             help="Priority ([H]igh, [L]ow)",
             metavar="PRIORITY"
         )
-        self.parser.add_argument(
-            "parameter",
-            nargs="*",
-            metavar="Description"
-        )
 
-    def process_args(self):
+    def parse_args(self, args=None):
+        """Parse arguments"""
+        if args:
+            return self.parser.parse_args(args)
+        else:
+            return self.parser.parse_args()
+
+    def process_args(self, args):
         """Process arguments to execute the right for each one."""
-        args = self.parser.parse_args()
-        if args.list:
+        if args.parameter:
+            if [
+                    key for key, val in vars(args).items()
+                    if val and key not in OPTIONALS
+            ]:
+                self.parser.print_help()
+            else:
+                new_doc = self.dbclient.create_task(vars(args))
+                self.dbclient.insert_task(new_doc)
+        elif args.list:
             self.dbclient.show_all_task(args.list)
         elif args.show:
             self.dbclient.show_task(args.show)
@@ -86,9 +112,10 @@ class Taskparser(object):
             self.dbclient.insert_task(new_doc)
         elif args.complete:
             self.dbclient.complete_task(args.complete)
-        elif args.parameter:
-            new_doc = self.dbclient.create_task(vars(args))
-            self.dbclient.insert_task(new_doc)
+        elif args.file:
+            for line in args.file:
+                args = self.parse_args(line.rstrip('\r\n').split())
+                self.process_args(args)
         else:
             self.parser.print_help()
 
@@ -96,7 +123,8 @@ class Taskparser(object):
 def main():
     """Main function"""
     task = Taskparser()
-    task.process_args()
+    args = task.parse_args()
+    task.process_args(args)
 
 
 if __name__ == '__main__':
