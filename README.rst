@@ -124,6 +124,8 @@ Usage
       -h, --help            show this help message and exit
       -a DESCRIPTION [DESCRIPTION ...], --add DESCRIPTION [DESCRIPTION ...]
                             Add a task
+      -f INPUT FILE, --file INPUT FILE
+                            Add batch of tasks in a file
       -c TASK ID, --complete TASK ID
                             Check a task as complete
       -l [FILTER], --list [FILTER]
