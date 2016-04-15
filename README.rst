@@ -70,11 +70,10 @@ Features
 
 * Create task with description
 * Complete a task
-* List all task or filter for:
+* List all task or filter for
     * description
     * project
     * tags
-
 * Show a task
 * Support for project
 * Support for priority
