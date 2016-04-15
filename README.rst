@@ -65,11 +65,6 @@ Examples
     status: incomplete
     tags: ['shopp', 'reminder']
 
-    $ task.py -f tasks.txt
-    Task created with id 1
-    Task created with id 2
-    Task created with id 3
-
 Batch insert
 ------------
 
@@ -77,9 +72,16 @@ Every line of the file must be a proper add task syntax
 
 .. code-block::
 
+    tastks.txt
+
     -a Buy some milk -p Shopping
     buy 2kg of bread -p Shopping -t food shopp
     make some food -q H -t hungry
+
+    $ task.py -f tasks.txt
+    Task created with id 1
+    Task created with id 2
+    Task created with id 3
 
 Features
 --------
