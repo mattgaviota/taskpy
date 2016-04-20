@@ -93,7 +93,7 @@ In order to define a due date you have two options:
 2. Adding a period of time to the current date with the format
    (^\+){1}(\d+)([h|d|w|m|y])
 
-..code-block::
+.. code-block::
 
     Assuming the current date is 19/04/2016
 
