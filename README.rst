@@ -129,7 +129,7 @@ Subtasks
 In order to insert a subtask you need explicit the parent id with -b option.
 
 To show the Subtasks use the -s option normally. This only show the incompleted
-task.
+subtasks.
 
 .. code-block::
 
