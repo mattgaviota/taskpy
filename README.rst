@@ -16,6 +16,7 @@ Requisites
 
 * python 3.X
 * pymongo(MongoDB 3.2)
+* dateutil
 
 Examples
 --------
@@ -32,7 +33,7 @@ Examples
     date: 15/04/2016 10:43
     description: buy some milk
     id: 1
-    priority: H
+    priority: High
     project: Shopping
     status: incomplete
 
@@ -53,14 +54,14 @@ Examples
     complete_date: 15/04/2016 10:44
     date: 15/04/2016 10:43
     description: buy some milk
-    priority: H
+    priority: High
     project: Shopping
     status: --complete--
     ----------------------------------------
     date: 15/04/2016 10:43
     description: buy 2kg of bread
     id: 2
-    priority: L
+    priority: Low
     project: Shopping
     status: incomplete
     tags: ['shopp', 'reminder']
@@ -83,6 +84,44 @@ Every line of the file must be a proper add task syntax
     Task created with id 2
     Task created with id 3
 
+Due Date
+--------
+
+In order to define a due date you have two options:
+
+1. Date in the format 'dd/mm/yyyy' or 'dd-mm-yyyy'
+2. Adding a period of time to the current date with the format
+   (^\+){1}(\d+)([h|d|w|m|y])
+
+..code-block::
+
+    Assuming the current date is 19/04/2016
+
+    $ task.py -a refactor the tests -d 04/05/2016 -p ImportantProject
+    Task created with id 1
+
+    $ task.py -a rewrite module credits -d +1w -p ImportantProject -q H
+    Task created with id 2
+
+    $ task.py -l
+    ----------------------------------------
+    date: 19/04/2016 23:52
+    description: rewrite module credits
+    due_date: 26/04/2016 23:52
+    id: 2
+    priority: High
+    project: ImportantProject
+    status: incomplete
+    ----------------------------------------
+    date: 19/04/2016 23:51
+    description: refactor the tests
+    due_date: 04/05/2016 00:00
+    id: 1
+    priority: Low
+    project: ImportantProject
+    status: incomplete
+
+
 Features
 --------
 
@@ -96,13 +135,13 @@ Features
 * Support for project(Case sensitive)
 * Support for priority
 * Support for tags
+* Support for due date
 * Batch insert from a file
 
 Incoming Features
 -----------------
 
 * Improve global look and feel
-* Support for due date
 * Subtasks
 * Support for projection settings in "PrettyJson"
 
@@ -111,30 +150,39 @@ Usage
 
 .. code-block:: bash
 
-    usage: task.py [-h] [-a DESCRIPTION [DESCRIPTION ...] | -c TASK ID | -l
-                   [FILTER] | -s TASK ID] [-p PROJECT]
-                   [PARAMETER [PARAMETER ...]]
+    usage: task.py [-h] [-a DESCRIPTION [DESCRIPTION ...] | -f INPUT FILE | -c
+           TASK ID | -l [FILTER] | -s TASK ID] [-p PROJECT]
+           [-t TAGS [TAGS ...]] [-q PRIORITY] [-d DUE DATE]
+           [Description [Description ...]]
 
     Task Manager app
 
     positional arguments:
-      PARAMETER
+    Description
 
     optional arguments:
-      -h, --help            show this help message and exit
-      -a DESCRIPTION [DESCRIPTION ...], --add DESCRIPTION [DESCRIPTION ...]
-                            Add a task
-      -f INPUT FILE, --file INPUT FILE
-                            Add batch of tasks in a file
-      -c TASK ID, --complete TASK ID
-                            Check a task as complete
-      -l [FILTER], --list [FILTER]
-                            List all task
-      -s TASK ID, --show TASK ID
-                            Show a task
-      -p PROJECT, --project PROJECT
-                            Project of a task
-      -t TAGS [TAGS ...], --tags TAGS [TAGS ...]
-                            Tags of a task(space between tags)
-      -q PRIORITY, --queue-priority PRIORITY
-                            Priority ([H]igh, [L]ow)
+    -h, --help            show this help message and exit
+    -a DESCRIPTION [DESCRIPTION ...], --add DESCRIPTION [DESCRIPTION ...]
+                    Add a task
+    -f INPUT FILE, --file INPUT FILE
+                    Add batch of tasks in a file
+    -c TASK ID, --complete TASK ID
+                    Check a task as complete
+    -l [FILTER], --list [FILTER]
+                    List all task
+    -s TASK ID, --show TASK ID
+                    Show a task
+    -p PROJECT, --project PROJECT
+                    Project of a task
+    -t TAGS [TAGS ...], --tags TAGS [TAGS ...]
+                    Tags of a task(space between tags)
+    -q PRIORITY, --queue-priority PRIORITY
+                    Priority ([H]igh, [L]ow)
+    -d DUE DATE, --due-date DUE DATE
+                    Due date as a date(dd/mm/YYYY) or a period in the format
+                    (^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
+                    h -> hours
+                    d -> days
+                    w -> weeks
+                    m -> months
+                    y -> years

@@ -2,7 +2,7 @@
 """Models to set crud operation into the tasks collection"""
 from datetime import datetime
 from pymongo import MongoClient
-from utils import clean_tags, format_field, prioritize
+from utils import clean_tags, format_field, prioritize, extract_date
 
 
 class Client(object):
@@ -61,7 +61,9 @@ class Client(object):
         except TypeError:
             pass
         try:
-            doc['due_date'] = args['due_date']
+            actual_date = extract_date(args['due_date'])
+            if actual_date:
+                doc['due_date'] = actual_date
         except KeyError:
             pass
         try:

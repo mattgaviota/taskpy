@@ -1,7 +1,8 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
+#! /usr/bin/env python3
+# coding=utf-8
+
 """Simple todo manager app"""
-from argparse import ArgumentParser, FileType
+from argparse import ArgumentParser, FileType, RawTextHelpFormatter
 from model import Client
 
 
@@ -12,7 +13,10 @@ class Taskparser(object):
     """Parser to manage de options and arguments"""
     def __init__(self):
         self.args = []
-        self.parser = ArgumentParser(description="Task Manager app")
+        self.parser = ArgumentParser(
+            description="Task Manager app",
+            formatter_class=RawTextHelpFormatter
+        )
         self.create_argument_parser()
         self.dbclient = Client()
 
@@ -84,6 +88,20 @@ class Taskparser(object):
             help="Priority ([H]igh, [L]ow)",
             metavar="PRIORITY"
         )
+        help_due = r"""Due date as a date(dd/mm/YYYY) or a period in the format
+(^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
+h -> hours
+d -> days
+w -> weeks
+m -> months
+y -> years"""
+        self.parser.add_argument(
+            "-d",
+            "--due-date",
+            dest="due_date",
+            help=help_due,
+            metavar="DUE DATE"
+        )
 
     def parse_args(self, args=None):
         """Parse arguments"""
@@ -117,7 +135,7 @@ class Taskparser(object):
                 args = self.parse_args(line.rstrip('\r\n').split())
                 self.process_args(args)
         else:
-            self.parser.print_help()
+            self.parser.print_usage()
 
 
 def main():

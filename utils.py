@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
 """ Printing pretty json tables """
+from datetime import datetime
+import re
+from dateutil.relativedelta import relativedelta
+
+
+PERIODS = {
+    'h': 'hours',
+    'd': 'days',
+    'w': 'weeks',
+    'm': 'months',
+    'y': 'years'
+}
 
 
 def clean_tags(tags):
@@ -27,9 +39,42 @@ def prioritize(priority):
     L for Low priority. This is the default.
     """
     if priority and priority in 'hH':
-        return 'H'
+        return 'High'
     else:
-        return 'L'
+        return 'Low'
+
+
+def extract_date(due_date):
+    r"""
+    Check the due date parameter to extract a date.
+    Accepted Format:
+        [((^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y]))|(dd/mm/YYYY)]
+    """
+    # find delta
+    delta_regx = re.compile(r'(^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])')
+    search = delta_regx.search(due_date)
+    if search:
+        number, quantifier = search.groups()[1:]
+        number = int(number)
+        quantifier = quantifier.lower()
+        date = datetime.now()
+        if quantifier:
+            date = date + relativedelta(**{PERIODS[quantifier]: number})
+            return date
+        else:
+            return None
+    else:
+        # find datetime
+        date_regx = re.compile(r'(\d\d)[-/](\d\d)[/|-](\d\d\d\d)')
+        search = date_regx.search(due_date)
+        if search:
+            day, month, year = search.groups()
+            str_date = "{0}/{1}/{2}".format(day, month, year)
+            try:
+                date = datetime.strptime(str_date, '%d/%m/%Y')
+            except ValueError:
+                return None
+            return date
 
 
 # class PrettyJson(object):
