@@ -64,12 +64,14 @@ class Client(object):
             actual_date = extract_date(args['due_date'])
             if actual_date:
                 doc['due_date'] = actual_date
-        except KeyError:
+        except TypeError:
             pass
         try:
-            doc['parent'] = self.get_id(args['parent'])
-        except KeyError:
-            pass
+            parent_id = self.get_id(int(args['parent']))
+            doc['parent'] = parent_id
+            doc['ancestors'] = self.get_ancestors(parent_id)
+        except TypeError:
+            doc['parent'] = None
         return doc
 
     def complete_task(self, clean_id):
@@ -81,7 +83,7 @@ class Client(object):
             {
                 '$set': {
                     'status': 'complete',
-                    'complete_date': datetime.now()
+                    'completed_date': datetime.now()
                 },
                 '$unset': {'id': ""}
             }
@@ -107,8 +109,23 @@ class Client(object):
 
     def get_id(self, clean_id):
         """Return the mongodb _id from a task given the id field"""
-        task = self.tasks.find_one({'id': clean_id}, {'_id': 1})
-        return task['_id']
+        task = self.tasks.find_one({'id': clean_id}, {'id': 1})
+        if task:
+            return task['id']
+        else:
+            return None
+
+    def get_ancestors(self, clean_id):
+        """Return an array of ancestors for the given id"""
+        ancestors = [clean_id]
+        ancestor = self.tasks.find_one({'id': clean_id}, {'parent': 1})
+        while ancestor['parent']:
+            ancestors.append(ancestor['parent'])
+            ancestor = self.tasks.find_one(
+                {'id': ancestor['parent']},
+                {'parent': 1}
+            )
+        return sorted(ancestors)
 
     def show_task(self, clean_id, doc=None):
         """Show a task given the id(not the _id)"""
@@ -120,6 +137,20 @@ class Client(object):
             if doc:
                 for key, val in sorted(doc.items()):
                     print(format_field(key, val), end="")
+                childrens = self.tasks.find(
+                    {
+                        '$and': [
+                            {'ancestors': doc['id']},
+                            {'status': 'incomplete'}
+                        ]
+                    },
+                    {'_id': 0}
+                )
+                if childrens.count() > 0:
+                    print("+--------+\r\n|Subtasks|\r\n+--------+")
+                    for child in childrens:
+                        print("----" * 10 + "\r\n", end="")
+                        self.show_task(child['id'], child)
             else:
                 print("The task doesn't exist or was completed.")
 

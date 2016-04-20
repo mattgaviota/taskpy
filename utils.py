@@ -16,10 +16,7 @@ PERIODS = {
 
 def clean_tags(tags):
     """Change all tags to lowercase and remove duplicated."""
-    new_tags = []
-    for tag in tags:
-        new_tags.append(tag.lower())
-    return list(set(new_tags))
+    return sorted(list(set([tag.lower() for tag in tags])))
 
 
 def format_field(name, value):
@@ -29,7 +26,16 @@ def format_field(name, value):
             value = '--{}--'.format(value)
     elif name in ['date', 'due_date', 'complete_date']:
         value = value.strftime("%d/%m/%Y %H:%M")
-    return '{}: {}\r\n'.format(name, value)
+    elif name == 'ancestors':
+        if value:
+            value = ', '.join(['Task {}'.format(id) for id in value])
+    elif name == 'parent':
+        if value:
+            value = 'Task {}'.format(value)
+    if value:
+        return '{}: {}\r\n'.format(name, value)
+    else:
+        return ''
 
 
 def prioritize(priority):

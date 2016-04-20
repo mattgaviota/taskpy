@@ -121,6 +121,43 @@ In order to define a due date you have two options:
     project: ImportantProject
     status: incomplete
 
+Subtasks
+--------
+
+In order to insert a subtask you need explicit the parent id with -b option.
+
+To show the Subtasks use the -s option normally. This only show the incompleted
+task.
+
+.. code-block::
+
+    $ task.py -a parent task -p Ancestors
+    Task created with id 1
+
+    $ task.py -a child task -p Ancestors -b 1
+    Task created with id 2
+
+    $ task.py -s 1
+    date: 20/04/2016 01:32
+    description: parent task
+    id: 1
+    priority: Low
+    project: Ancestors
+    status: incomplete
+    +--------+
+    |Subtasks|
+    +--------+
+    ----------------------------------------
+    ancestors: Task 1
+    date: 20/04/2016 01:33
+    description: child task
+    id: 2
+    parent: Task 1
+    priority: Low
+    project: Ancestors
+    status: incomplete
+
+
 
 Features
 --------
@@ -137,12 +174,12 @@ Features
 * Support for tags
 * Support for due date
 * Batch insert from a file
+* Subtasks *usable but not pretty*
 
 Incoming Features
 -----------------
 
 * Improve global look and feel
-* Subtasks
 * Support for projection settings in "PrettyJson"
 
 Usage
@@ -151,9 +188,9 @@ Usage
 .. code-block:: bash
 
     usage: task.py [-h] [-a DESCRIPTION [DESCRIPTION ...] | -f INPUT FILE | -c
-           TASK ID | -l [FILTER] | -s TASK ID] [-p PROJECT]
-           [-t TAGS [TAGS ...]] [-q PRIORITY] [-d DUE DATE]
-           [Description [Description ...]]
+               TASK ID | -l [FILTER] | -s TASK ID] [-p PROJECT]
+               [-t TAGS [TAGS ...]] [-q PRIORITY] [-d DUE DATE] [-b PARENT ID]
+               [Description [Description ...]]
 
     Task Manager app
 
@@ -163,26 +200,28 @@ Usage
     optional arguments:
     -h, --help            show this help message and exit
     -a DESCRIPTION [DESCRIPTION ...], --add DESCRIPTION [DESCRIPTION ...]
-                    Add a task
+                        Add a task
     -f INPUT FILE, --file INPUT FILE
-                    Add batch of tasks in a file
+                        Add batch of tasks in a file
     -c TASK ID, --complete TASK ID
-                    Check a task as complete
+                        Check a task as complete
     -l [FILTER], --list [FILTER]
-                    List all task
+                        List all task
     -s TASK ID, --show TASK ID
-                    Show a task
+                        Show a task
     -p PROJECT, --project PROJECT
-                    Project of a task
+                        Project of a task
     -t TAGS [TAGS ...], --tags TAGS [TAGS ...]
-                    Tags of a task(space between tags)
+                        Tags of a task(space between tags)
     -q PRIORITY, --queue-priority PRIORITY
-                    Priority ([H]igh, [L]ow)
+                        Priority ([H]igh, [L]ow)
     -d DUE DATE, --due-date DUE DATE
-                    Due date as a date(dd/mm/YYYY) or a period in the format
-                    (^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
-                    h -> hours
-                    d -> days
-                    w -> weeks
-                    m -> months
-                    y -> years
+                        Due date as a date(dd/mm/YYYY) or a period in the format
+                        (^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
+                        h -> hours
+                        d -> days
+                        w -> weeks
+                        m -> months
+                        y -> years
+    -b PARENT ID, --bairn PARENT ID
+                        Id of the parent task

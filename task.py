@@ -102,6 +102,13 @@ y -> years"""
             help=help_due,
             metavar="DUE DATE"
         )
+        self.parser.add_argument(
+            "-b",
+            "--bairn",
+            dest="parent",
+            help="Id of the parent task",
+            metavar="PARENT ID"
+        )
 
     def parse_args(self, args=None):
         """Parse arguments"""
