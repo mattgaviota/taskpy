@@ -21,18 +21,15 @@ def clean_tags(tags):
 
 def format_field(name, value):
     """Format a Field of a task"""
-    if name == 'status':
-        if value == 'complete':
-            value = '--{}--'.format(value)
-    elif name in ['date', 'due_date', 'complete_date']:
-        value = value.strftime("%d/%m/%Y %H:%M")
-    elif name == 'ancestors':
-        if value:
-            value = ', '.join(['Task {}'.format(id) for id in value])
-    elif name == 'parent':
-        if value:
-            value = 'Task {}'.format(value)
     if value:
+        if name == 'status':
+            value = '--{}--'.format(value)
+        elif name in ['date', 'due_date', 'complete_date']:
+            value = value.strftime("%d/%m/%Y %H:%M")
+        elif name == 'ancestors':
+            value = ', '.join(['Task {}'.format(id) for id in value])
+        elif name == 'parent':
+            value = 'Task {}'.format(value)
         return '{}: {}\r\n'.format(name, value)
     else:
         return ''
@@ -71,13 +68,13 @@ def extract_date(due_date):
             return None
     else:
         # find datetime
-        date_regx = re.compile(r'(\d\d)[-/](\d\d)[/|-](\d\d\d\d)')
+        date_regx = re.compile(r'(\d\d)[-/](\d\d)[/|-](\d\d)')
         search = date_regx.search(due_date)
         if search:
             day, month, year = search.groups()
             str_date = "{0}/{1}/{2}".format(day, month, year)
             try:
-                date = datetime.strptime(str_date, '%d/%m/%Y')
+                date = datetime.strptime(str_date, '%d/%m/%y')
             except ValueError:
                 return None
             return date

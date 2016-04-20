@@ -88,8 +88,8 @@ class Taskparser(object):
             help="Priority ([H]igh, [L]ow)",
             metavar="PRIORITY"
         )
-        help_due = r"""Due date as a date(dd/mm/YYYY) or a period in the format
-(^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
+        help_due = """Due date as a date(dd/mm/YY) or a period in the format
++NUMBERS[h|d|w|m|y] where
 h -> hours
 d -> days
 w -> weeks

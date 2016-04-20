@@ -91,14 +91,16 @@ In order to define a due date you have two options:
 
 1. Date in the format 'dd/mm/yyyy' or 'dd-mm-yyyy'
 2. Adding a period of time to the current date with the format
-   (^\+){1}(\d+)([h|d|w|m|y])
+   +NUMBERS[h|d|w|m|y]
 
 .. code-block::
 
-    Assuming the current date is 19/04/2016
+    Assuming the current date is 19/04/2016. We can define a due date explicit.
 
     $ task.py -a refactor the tests -d 04/05/2016 -p ImportantProject
     Task created with id 1
+
+    Or just set the due date in one week.
 
     $ task.py -a rewrite module credits -d +1w -p ImportantProject -q H
     Task created with id 2
@@ -216,8 +218,8 @@ Usage
     -q PRIORITY, --queue-priority PRIORITY
                         Priority ([H]igh, [L]ow)
     -d DUE DATE, --due-date DUE DATE
-                        Due date as a date(dd/mm/YYYY) or a period in the format
-                        (^\+){1}(\d+)([d|D|h|H|w|W|m|M|y|Y])
+                        Due date as a date(dd/mm/YY) or a period in the format
+                        +NUMBERS[h|d|w|m|y] where
                         h -> hours
                         d -> days
                         w -> weeks
